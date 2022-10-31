@@ -1,12 +1,20 @@
+import Terrain from './terrain/terrain.js';
 
 
 export default class Earth{
-	constructor(){
-		
+	constructor(options = {}){
+		this.layers = [];
+		this.terrain = new Terrain(options);
 	}
-	update(camera){
-		
+
+	update(){
+		// console.log('earth update');
 	}
+
+	addLayer(fun){
+		this.terrain.layers.push(fun);
+	}
+
 	destroy(){
 		
 	}
