@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Earth from './earth/earth.js';
 import bingLayer from './earth/layer/bing_layer.js';
+import { OrbitControls } from './tool/orbit_controls.js';
 
 export default class GisInit{
 	constructor(container = document.body){
@@ -16,7 +17,10 @@ export default class GisInit{
 		this.container.appendChild( this.renderer.domElement );
 
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
+		this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 100000000 );
+		this.camera.position.set(0, 0,  20000000);
+
+		this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
 
 		this.onWindowResize = this.onWindowResize.bind(this);
 		window.addEventListener( 'resize', this.onWindowResize );

@@ -17,10 +17,10 @@ export default class TileGeometry extends BufferGeometry{
 
 		let
 			n = Math.pow(2, z),
-			longitude0 = x / n * 360 - 180,
-			longitude1 = (x + 1) / n * 360 - 180,
-			latitude0 = Math.atan( Math.sinh( Math.PI * (1 - 2 * (y + 1) / n) ) ) * 180 / Math.PI,
-			latitude1 = Math.atan( Math.sinh( Math.PI * (1 - 2 * y / n) ) ) * 180 / Math.PI,
+			longitude0 = y / n * 360 - 180,
+			longitude1 = (y + 1) / n * 360 - 180,
+			latitude0 = Math.atan( Math.sinh( Math.PI * (1 - 2 * (x + 1) / n) ) ) * 180 / Math.PI,
+			latitude1 = Math.atan( Math.sinh( Math.PI * (1 - 2 * x / n) ) ) * 180 / Math.PI,
 
 			{ x0, y0, x1, y1 } = Mercator.getMercatorRangeByTile(x, y, z);
 
@@ -39,6 +39,11 @@ export default class TileGeometry extends BufferGeometry{
 					longitude0 + j * deltaX,
 					latitude1 - i * deltaY
 				);
+				// console.log( Mercator.getCartesianByLL(
+				// 	longitude0 + j * deltaX,
+				// 	latitude1 - i * deltaY,
+				// 	300
+				// ))
 				// console.log('longitude:', longitude0 + j * deltaX, 'latitude:', latitude1 - i * deltaY);
 				vertices.push(x, y, z);
 				uvs.push( j * deltaUV, 1 - i * deltaUV );
@@ -64,5 +69,6 @@ export default class TileGeometry extends BufferGeometry{
 
 		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
 		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
+		this.setIndex(indices);
 	}
 }
