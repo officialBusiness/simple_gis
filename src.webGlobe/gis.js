@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import Earth from './earth/earth.js';
+import bingLayer from './earth/layer/bing_layer.js';
 
 export default class GisInit{
 	constructor(container = document.body){
 		this.initScene(container);
-
 		this.initEarth();
 	}
 	initScene(container){
@@ -25,9 +25,8 @@ export default class GisInit{
 		requestAnimationFrame( this.animate );
 	}
 	initEarth(){
-		this.earth = new Earth({
-			scene: this.scene
-		});
+		this.earth = new Earth()
+									.mountScene(this.scene);
 	}
 	initEvent(){
 
@@ -47,7 +46,12 @@ export default class GisInit{
 		window.removeEventListener( 'resize', this.onWindowResize );
 	}
 
-	addLayer(){
+	addBingLayer(){
+		this.earth.addLayer(bingLayer);
+		return this;
+	}
+
+	addLayer(url, imageType){
 
 	}
 }

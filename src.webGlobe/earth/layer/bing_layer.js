@@ -80,5 +80,5 @@ export default function bingLayer(x,y,z){
   }
   var sum = z + x + y;
   var serverIdx = sum % 8;
-  return = "//ecn.t" + serverIdx + ".tiles.virtualearth.net/tiles/h" + strMerge4 + ".jpeg?g=1239&mkt=en-us";
+  return "//ecn.t" + serverIdx + ".tiles.virtualearth.net/tiles/h" + strMerge4 + ".jpeg?g=1239&mkt=en-us";
 }
