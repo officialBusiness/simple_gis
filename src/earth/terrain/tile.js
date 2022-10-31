@@ -25,6 +25,7 @@ export default class Tile extends Mesh {
 				map: new TextureLoader().load( getUrl(x, y, z) ),
 				depthTest: false,
 				color: 0xffffff,
+				// wireframe: true,
 			});
 
 		super(geometry, material);

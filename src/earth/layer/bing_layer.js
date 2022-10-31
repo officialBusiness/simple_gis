@@ -48,9 +48,10 @@ function numerationSystemChange(numSysFrom, numSysTo, strNumFrom){
   return strResult;
 }
 
-export default function bingLayer(x,y,z){
-  var tileX = y;
-  var tileY = x;
+export default function bingLayer( column, row, level) {
+  var url = "";
+  var tileX = column;
+  var tileY = row;
   var strTileX2 = numerationSystemFrom10(2, tileX);
   var strTileY2 = numerationSystemFrom10(2, tileY);
   var delta = strTileX2.length - strTileY2.length;
@@ -72,13 +73,15 @@ export default function bingLayer(x,y,z){
     strMerge2 += charY + charX;
   }
   var strMerge4 = numerationSystemChange(2, 4, strMerge2);
-  if (strMerge4.length < z) {
-    delta = z - strMerge4.length;
+  if (strMerge4.length < level) {
+    delta = level - strMerge4.length;
     for (i = 0; i < delta; i++) {
       strMerge4 = '0' + strMerge4;
     }
   }
-  var sum = z + x + y;
-  var serverIdx = sum % 8;
-  return "//ecn.t" + serverIdx + ".tiles.virtualearth.net/tiles/h" + strMerge4 + ".jpeg?g=1239&mkt=en-us";
-}
+  var sum = level + row + column;
+  var serverIdx = sum % 8; //0,1,2,3,4,5,6,7
+  //var styles = ['a','r','h']
+  url = "//ecn.t" + serverIdx + ".tiles.virtualearth.net/tiles/h" + strMerge4 + ".jpeg?g=1239&mkt=en-us";
+  return url;
+};

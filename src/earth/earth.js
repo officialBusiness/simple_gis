@@ -18,6 +18,23 @@ export default class Earth{
 		this.terrain.add(new Tile(1,0,1));
 		this.terrain.add(new Tile(0,1,1));
 		this.terrain.add(new Tile(1,1,1));
+
+		// this.terrain.add(new Tile(0,0,2));
+		// this.terrain.add(new Tile(1,0,2));
+		// this.terrain.add(new Tile(2,0,2));
+		// this.terrain.add(new Tile(3,0,2));
+		// this.terrain.add(new Tile(0,1,2));
+		// this.terrain.add(new Tile(1,1,2));
+		// this.terrain.add(new Tile(2,1,2));
+		// this.terrain.add(new Tile(3,1,2));
+		// this.terrain.add(new Tile(0,2,2));
+		// this.terrain.add(new Tile(1,2,2));
+		// this.terrain.add(new Tile(2,2,2));
+		// this.terrain.add(new Tile(3,2,2));
+		// this.terrain.add(new Tile(0,3,2));
+		// this.terrain.add(new Tile(1,3,2));
+		// this.terrain.add(new Tile(2,3,2));
+		// this.terrain.add(new Tile(3,3,2));
 		return this;
 	}
 

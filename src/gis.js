@@ -13,12 +13,14 @@ export default class GisInit{
 		this.renderer = new THREE.WebGLRenderer( {
 			antialias: true
 		} );
+		this.renderer.setPixelRatio(window.devicePixelRatio);
+		this.renderer.setClearColor(0xffffff);
 		this.renderer.domElement.className = 'simple_gis';
 		this.container.appendChild( this.renderer.domElement );
 
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 100000000 );
-		this.camera.position.set(0, 0,  20000000);
+		this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 20000000 );
+		this.camera.position.set(0, 0, 13500000);
 
 		this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
 

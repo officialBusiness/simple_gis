@@ -6,8 +6,7 @@ import {
 import Mercator from '../../core/coordinate/mercator.js';
 
 export default class TileGeometry extends BufferGeometry{
-	constructor(x, y, z){
-		console.log('x:', x, 'y:', y, 'z:', z);
+	constructor(column, row, level){
 		super();
 		this.type = 'TileGeometry';
 
@@ -16,45 +15,43 @@ export default class TileGeometry extends BufferGeometry{
 		const uvs = [];
 
 		let
-			n = Math.pow(2, z),
-			longitude0 = y / n * 360 - 180,
-			longitude1 = (y + 1) / n * 360 - 180,
-			latitude0 = Math.atan( Math.sinh( Math.PI * (1 - 2 * (x + 1) / n) ) ) * 180 / Math.PI,
-			latitude1 = Math.atan( Math.sinh( Math.PI * (1 - 2 * x / n) ) ) * 180 / Math.PI,
+			minLongitude = Mercator.getLongitudeByTile( column, level ),
+			maxLongitude = Mercator.getLongitudeByTile( column + 1, level ),
+			minLatitude = Mercator.getLatitudeByTile( row + 1, level ),
+			maxLatitude = Mercator.getLatitudeByTile( row, level ),
 
-			{ x0, y0, x1, y1 } = Mercator.getMercatorRangeByTile(x, y, z);
+			minMercatorX = Mercator.getMercatorXByLongitude(minLongitude),
+			maxMercatorX = Mercator.getMercatorXByLongitude(maxLongitude),
+			minMercatorY = Mercator.getMercatorYByLatitude(minLatitude),
+			maxMercatorY = Mercator.getMercatorYByLatitude(maxLatitude),
 
-		// console.log('longitude0:', longitude0, 'longitude1:', longitude1, 'latitude0:', latitude0, 'latitude1:', latitude1);
-		// console.log('x0:', x0, 'x1:', x1, 'y0:', y0, 'y1:', y1);
+			wSegment = 64 >> level,
+			hSegment = 64 >> level,
 
-		const
-			segment = 32,
-			deltaX = ( longitude1 - longitude0 ) / segment,
-			deltaY = ( latitude1 - latitude0 ) / segment,
-			deltaUV = 1 / segment;
+			deltaX = ( maxMercatorX - minMercatorX ) / wSegment,
+			deltaY = ( maxMercatorY - minMercatorY ) / hSegment,
+			deltaU = 1 / wSegment,
+			deltaV = 1 / hSegment;
 
-		for( let i = 0; i <= segment; i++ ){
-			for( let j = 0; j <= segment; j++ ){
+		for( let i = 0; i <= hSegment; i++ ){
+			let latitude = Mercator.getLatitudeByMercatorY( maxMercatorY - i * deltaY ),
+					v = 1 - i * deltaV;
+			for( let j = 0; j <= wSegment; j++ ){
 				let { x, y, z } = Mercator.getCartesianByLL(
-					longitude0 + j * deltaX,
-					latitude1 - i * deltaY
+					Mercator.getLongitudeByMercatorX( minMercatorX + j * deltaX ),
+					latitude
 				);
-				// console.log( Mercator.getCartesianByLL(
-				// 	longitude0 + j * deltaX,
-				// 	latitude1 - i * deltaY,
-				// 	300
-				// ))
-				// console.log('longitude:', longitude0 + j * deltaX, 'latitude:', latitude1 - i * deltaY);
+
 				vertices.push(x, y, z);
-				uvs.push( j * deltaUV, 1 - i * deltaUV );
+				uvs.push( j * deltaU, v );
 			}			
 		}
 
-		for( let i = 0; i < segment; i++ ){
-			for( let j = 0; j < segment; j++ ){
+  for (let i = 0; i < hSegment; i++) {
+    for (let j = 0; j < wSegment; j++) {
 				let
-					idx0 = (segment + 1) * i + j,
-					idx1 = (segment + 1) * ( i + 1 ) + j,
+					idx0 = (wSegment + 1) * i + j,
+					idx1 = (wSegment + 1) * ( i + 1 ) + j,
 					idx2 = idx1 + 1,
 					idx3 = idx0 + 1;
 				indices.push(
@@ -65,7 +62,6 @@ export default class TileGeometry extends BufferGeometry{
 				);
 			}	
 		}
-		// console.log('vertices:', JSON.stringify(vertices, null, 4));
 
 		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
 		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
