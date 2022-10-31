@@ -1,9 +1,10 @@
 import {
 	Mesh,
 	MeshBasicMaterial,
+	Texture,
 } from 'three';
 import TileGeometry from './tile_geometry.js';
-// import TileMaterial from './tile_material.js';
+import getUrl from '../layer/bing_layer.js';
 
 export function getTileImageUrl(layers, x, y, z){
 	return layers.map((layer)=>{
@@ -17,11 +18,14 @@ export default class Tile extends Mesh {
 	}
 	constructor(x, y, z, layers){
 		// 初始化几何体
-		// let image 
+		let image = new Image();
+		image.src = getUrl(x, y, z);
 		let 
 			geometry = new TileGeometry( x, y, z ),
 			material = new MeshBasicMaterial({
-
+				map: new Texture({
+					image
+				})
 			});
 
 
