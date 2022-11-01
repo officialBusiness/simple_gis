@@ -44,7 +44,6 @@ export default class GisInit{
 	onWindowResize(){
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.updateProjectionMatrix();
-
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
 	}
 	animate(){

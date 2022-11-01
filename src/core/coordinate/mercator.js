@@ -50,7 +50,7 @@ const Mercator = {
 			f = 1 / Mercator.invFlat,
 			b = a * (1 - f),
 			e = Math.sqrt(a * a - b * b) / a,
-		  N = a / Math.sqrt(1 - e * e * Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180));
+			N = a / Math.sqrt(1 - e * e * Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180));
 
 		return {
 			x: (N + height) * Math.cos(latitude * Math.PI / 180) * Math.cos(longitude * Math.PI / 180),
@@ -59,7 +59,24 @@ const Mercator = {
 		}
 	},
 	getLLByCartesian( x, y, z ){
-		
+		let
+			a = Mercator.radius,
+			f = 1 / Mercator.invFlat,
+			b = a * (1 - f),
+			
+			ea = Math.sqrt((a * a - b * b) / (a * a)),
+			eb = Math.sqrt((a * a - b * b) / (b * b)),
+			p = Math.sqrt( x * x + y * y ),
+			theta = Math.atan2(z * a, p * b),
+ 
+			// 计算经纬度及海拔
+			longitude = Math.atan2(y, x),
+			latitude = Math.atan2(z + eb * eb * b * Math.pow( Math.sin(theta), 3), p - ea * ea * a * Math.pow( Math.cos(theta), 3)),
+			N = a / Math.sqrt(1 - ea * ea * Math.sin(latitude) * Math.sin(latitude)),
+			height = p / Math.cos(latitude) - N;
+		return {
+			longitude, latitude, height
+		}
 	},
 
 }
