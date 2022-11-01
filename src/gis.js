@@ -15,12 +15,13 @@ export default class GisInit{
 		} );
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.setClearColor(0xffffff);
+		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
 		this.renderer.domElement.className = 'simple_gis';
 		this.container.appendChild( this.renderer.domElement );
 
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 20000000 );
-		this.camera.up.set(0,-1,0);
+		this.camera.up.set(0,0,1);
 		this.camera.position.set(0, 13500000, 0);
 
 		this.scene.add( new THREE.AxesHelper( 23500000 ) );
