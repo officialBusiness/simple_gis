@@ -44,7 +44,7 @@ export default class Earth{
 	}
 
 	update(camera){
-
+		
 	}
 
 	addLayer(fun){

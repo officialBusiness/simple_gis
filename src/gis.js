@@ -20,7 +20,10 @@ export default class GisInit{
 
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 20000000 );
-		this.camera.position.set(0, 0, 13500000);
+		this.camera.up.set(0,-1,0);
+		this.camera.position.set(0, 13500000, 0);
+
+		this.scene.add( new THREE.AxesHelper( 23500000 ) );
 
 		this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
 
