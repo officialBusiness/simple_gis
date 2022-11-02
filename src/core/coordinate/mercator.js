@@ -77,14 +77,19 @@ const Mercator = {
 		    longitude = longitude + Math.PI;
 		  }
 
-		  longitude = longitude / Math.PI * 180;
-		  latitude = latitude / Math.PI * 180;
+		  longitude = longitude / Math.PI * 180 % 180;
+		  latitude = latitude / Math.PI * 180 % 180;
 
 		return {
 			longitude, latitude, height
 		}
 	},
 
+}
+
+window.t = (longitude, latitude, height)=>{
+	let {x, y, z} = Mercator.getCartesianByLL(longitude, latitude, height);
+	console.log(Mercator.getLLByCartesian(x, y, z));
 }
 
 export default Mercator;
