@@ -15,10 +15,10 @@ export default class TileGeometry extends BufferGeometry{
 		const uvs = [];
 
 		let
-			minLongitude = Mercator.getLongitudeByTile( column, level ),
-			maxLongitude = Mercator.getLongitudeByTile( column + 1, level ),
-			minLatitude = Mercator.getLatitudeByTile( row + 1, level ),
-			maxLatitude = Mercator.getLatitudeByTile( row, level ),
+			minLongitude = Mercator.getLongitudeByTileOrder( column, level ),
+			maxLongitude = Mercator.getLongitudeByTileOrder( column + 1, level ),
+			minLatitude = Mercator.getLatitudeByTileOrder( row + 1, level ),
+			maxLatitude = Mercator.getLatitudeByTileOrder( row, level ),
 
 			minMercatorX = Mercator.getMercatorXByLongitude(minLongitude),
 			maxMercatorX = Mercator.getMercatorXByLongitude(maxLongitude),
@@ -47,8 +47,8 @@ export default class TileGeometry extends BufferGeometry{
 			}			
 		}
 
-  for (let i = 0; i < hSegment; i++) {
-    for (let j = 0; j < wSegment; j++) {
+	  for (let i = 0; i < hSegment; i++) {
+	    for (let j = 0; j < wSegment; j++) {
 				let
 					idx0 = (wSegment + 1) * i + j,
 					idx1 = (wSegment + 1) * ( i + 1 ) + j,
