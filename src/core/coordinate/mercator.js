@@ -57,8 +57,8 @@ const Mercator = {
 			a = Mercator.radius,
 			b = a * (1 - 1 / Mercator.invFlat),
 			
-			e = Math.sqrt((a * a - b * b) / (a * a)),
-			eprime = Math.sqrt((a * a - b * b) / (b * b)),
+			e = Math.sqrt( a * a - b * b ) / a,
+			eprime = Math.sqrt( a * a - b * b ) / b,
 			p = Math.sqrt( x * x + y * y ),
 			theta = Math.atan(z * a / p / b),
  
@@ -69,16 +69,8 @@ const Mercator = {
 			N = a / Math.sqrt( 1 - e * e * Math.sin(latitude) * Math.sin(latitude) ),
 			height = p / Math.cos(latitude) - N;
 
-		  if (x < 0 && y < 0) {
-		    longitude = longitude - Math.PI;
-		  }
-
-		  if (x < 0 && y > 0) {
-		    longitude = longitude + Math.PI;
-		  }
-
-		  longitude = longitude / Math.PI * 180 % 180;
-		  latitude = latitude / Math.PI * 180 % 180;
+		  longitude = longitude / Math.PI * 180;
+		  latitude = latitude / Math.PI * 180;
 
 		return {
 			longitude, latitude, height
