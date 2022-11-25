@@ -19,9 +19,15 @@
 			}
 		</script>
 		<script type="module">
+			import * as THREE from 'three';
 			import Gis from '../src/gis.js';
+			import Mercator from '../src/core/coordinate/mercator.js';
 
-			let gis = new Gis().addBingLayer();
+			let
+				gis = new Gis().addBingLayer(),
+				cameraPosition = gis.camera.position;
+
+			
 
 		</script>
 	</body>

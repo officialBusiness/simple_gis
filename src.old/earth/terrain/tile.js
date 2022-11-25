@@ -5,7 +5,7 @@ import {
 	TextureLoader
 } from 'three';
 import TileGeometry from './tile_geometry.js';
-import getUrl from '../layer/bing_layer.js';
+// import getUrl from '../layer/bing_layer.js';
 
 export function getTileImageUrl(layers, x, y, z){
 	return layers.map((layer)=>{
@@ -22,10 +22,11 @@ export default class Tile extends Mesh {
 		let 
 			geometry = new TileGeometry( x, y, z ),
 			material = new MeshBasicMaterial({
-				map: new TextureLoader().load( getUrl(x, y, z) ),
+				// map: new TextureLoader().load( getUrl(x, y, z) ),
 				depthTest: false,
-				color: 0xffffff,
-				// wireframe: true,
+				// color: 0xffffff,
+				color: 0x000000,
+				wireframe: true,
 			});
 
 		super(geometry, material);

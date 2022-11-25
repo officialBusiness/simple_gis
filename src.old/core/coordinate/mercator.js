@@ -79,9 +79,4 @@ const Mercator = {
 
 }
 
-window.t = (longitude, latitude, height)=>{
-	let {x, y, z} = Mercator.getCartesianByLL(longitude, latitude, height);
-	console.log(Mercator.getLLByCartesian(x, y, z));
-}
-
 export default Mercator;

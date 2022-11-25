@@ -25,8 +25,8 @@ export default class TileGeometry extends BufferGeometry{
 			minMercatorY = Mercator.getMercatorYByLatitude(minLatitude),
 			maxMercatorY = Mercator.getMercatorYByLatitude(maxLatitude),
 
-			wSegment = 64 >> level,
-			hSegment = 64 >> level,
+			wSegment = Math.max( 64 >> level, 1),
+			hSegment = Math.max( 64 >> level, 1),
 
 			deltaX = ( maxMercatorX - minMercatorX ) / wSegment,
 			deltaY = ( maxMercatorY - minMercatorY ) / hSegment,

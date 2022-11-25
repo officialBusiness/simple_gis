@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>get_point</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="../src/gis.css">
+	</head>
+
+	<body>
+
+		<div id="container"></div>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "../libs/three.module.js"
+				}
+			}
+		</script>
+		<script type="module">
+			import * as THREE from 'three';
+			import Gis from '../src/gis.js';
+			import Mercator from '../src/core/coordinate/mercator.js';
+
+			let gis = new Gis(),
+					scene = gis.getScene();
+
+			scene.add( new THREE.AxesHelper( 10000000 ) );
+			let 
+				box1 = new THREE.Mesh(
+        	new THREE.BoxGeometry( 100000, 100000, 100000 ),
+        	new THREE.MeshBasicMaterial( {color: 0xff0000} )
+        ),
+				box2 = new THREE.Mesh(
+        	new THREE.BoxGeometry( 100000, 100000, 100000 ),
+        	new THREE.MeshBasicMaterial( {color: 0xff0000} )
+        );
+
+      scene.add(box1);
+      // scene.add(box2);
+
+			function showIntersection(){
+				let
+					camera = gis.getCamera(),
+
+					v1 = new THREE.Vector3().copy(camera.position),
+					v2 = new THREE.Vector3(0,0,0).applyMatrix4( camera.projectionMatrixInverse ).applyMatrix4( new THREE.Matrix4().compose( camera.position, camera.quaternion, camera.scale ) ),
+
+					AAxis = 6378137,
+					BAxis = 6378137,
+					CAxis = 6378137 * ( 1 - 1 / 298.257223563 ),
+
+					x1 = v1.x, y1 = v1.y, z1 = v1.z,
+					x2 = v2.x, y2 = v2.y, z2 = v2.z,
+
+        	ASquare = AAxis * AAxis,
+	        BSquare = BAxis * BAxis,
+	        CSquare = CAxis * CAxis,
+
+        	A = (y2 -y1) / (x2 - x1),
+        	B = (z2 -z1) / (x2 - x1),
+
+	        ta = BSquare * CSquare + A * A * ASquare * CSquare + B * B * ASquare * BSquare,
+
+	        tb = 2 * y1 * ASquare * CSquare * A - 2 * x1 * A * A * ASquare * CSquare + 2 * z1 * ASquare * BSquare * B - 2 * x1 * B * B * ASquare * BSquare,
+
+	        tc = ASquare * CSquare* y1 * y1 - 2 * y1 * ASquare * CSquare * A * x1 + A * A * x1 * x1 * ASquare * CSquare + ASquare * BSquare * z1 * z1 - 2 * z1 * ASquare * BSquare * B * x1 + B * B * x1 * x1 * ASquare * BSquare - ASquare * BSquare * CSquare,
+
+	        delt = tb * tb - 4 * ta * tc,
+
+	        t1, t2;
+
+				if(delt >= 0) {
+					let p1, p2;
+
+          t1 = ( -tb + Math.sqrt(delt) ) / ( 2 * ta );
+          t2 = ( -tb - Math.sqrt(delt) ) / ( 2 * ta );
+          let x = t1;
+          let y = y1 + A * (x - x1);
+          let z = z1 + B * (x - x1);
+          p1 = new THREE.Vector3(x, y, z);
+
+          x = t2;
+          y = y1 + A * (x - x1);
+          z = z1 + B * (x - x1);
+          p2 = new THREE.Vector3(x, y, z);
+
+          if( new THREE.Vector3().copy(camera.position).sub(p1).length() < new THREE.Vector3().copy(camera.position).sub(p2).length() ){
+						box1.position.copy(p1);
+          }else{
+						box1.position.copy(p2);
+          }
+        }else{
+
+        }
+			}
+
+			window.showIntersection = showIntersection;
+			gis.addUpdateFun(()=>{
+				// showIntersection()
+			});
+		</script>
+	</body>
+</html>
