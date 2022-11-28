@@ -4,7 +4,7 @@
 		<title>start</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="../src/gis.css">
+		<link rel="stylesheet" type="text/css" href="./example.css">
 	</head>
 
 	<body>
@@ -14,21 +14,61 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "../libs/three.module.js"
+					"three": "../libs/three.module.js",
+					"jsm/": "../libs/jsm/"
 				}
 			}
 		</script>
 		<script type="module">
 			import * as THREE from 'three';
-			import Gis from '../src/gis.js';
-			import Mercator from '../src/core/coordinate/mercator.js';
+			import Stats from 'jsm/libs/stats.module.js';
+			import { OrbitControls } from 'jsm/controls/OrbitControls.js';
 
-			let
-				gis = new Gis().addBingLayer(),
-				cameraPosition = gis.camera.position;
+			import Earth from '../src.old/earth/earth.js';
 
-			
 
+			const renderer = new THREE.WebGLRenderer( { antialias: true } );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setClearColor( 0xffffff, 1.0 );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			const scene = new THREE.Scene();
+
+			scene.add( new THREE.AxesHelper( 500 ) );
+
+			scene.add(new THREE.AmbientLight( 0x404040 ));
+
+			const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000000000 );
+			camera.up.set(0,0,1);
+			camera.position.set(0, 13500000, 0);
+
+			const orbitControls = new OrbitControls( camera, renderer.domElement );
+			orbitControls.target.set(0, 0, 0);
+
+			window.addEventListener( 'resize', onWindowResize );
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			let earth = new Earth().mountScene(scene);
+
+			const stats = new Stats();
+			document.body.appendChild( stats.dom );
+
+			animate();
+			function animate() {
+				requestAnimationFrame( animate );
+				stats.update();
+				renderer.render( scene, camera );
+			}
+
+			window.updateEarth = ()=>{
+				earth.update(camera);
+			}
 		</script>
 	</body>
 </html>
