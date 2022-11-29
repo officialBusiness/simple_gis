@@ -1266,5 +1266,22 @@ class OrbitControls extends EventDispatcher {
 //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
 //    Pan - left mouse, or arrow keys / touch: one-finger move
 
+class MapControls extends OrbitControls {
 
-export { OrbitControls };
+	constructor( object, domElement ) {
+
+		super( object, domElement );
+
+		this.screenSpacePanning = false; // pan orthogonal to world-space direction camera.up
+
+		this.mouseButtons.LEFT = MOUSE.PAN;
+		this.mouseButtons.RIGHT = MOUSE.ROTATE;
+
+		this.touches.ONE = TOUCH.PAN;
+		this.touches.TWO = TOUCH.DOLLY_ROTATE;
+
+	}
+
+}
+
+export { OrbitControls, MapControls };

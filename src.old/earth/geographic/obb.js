@@ -10,13 +10,20 @@ import {
 import Coordinates from './coordinates.js';
 
 function OBB(min, max, lookAt, translate) {
+    // this.init(min, max, lookAt, translate);
+}
+
+OBB.prototype = Object.create(Object3D.prototype);
+OBB.prototype.constructor = OBB;
+
+OBB.prototype.init = function(min, max, lookAt, translate){
     this.box3D = new Box3(min, max);
 
     this.natBox = this.box3D.clone();
 
     if (lookAt) {
         // console.log('lookAt:', lookAt);
-        // this.lookAt(lookAt);
+        this.lookAt(lookAt);
     }
 
 
@@ -33,8 +40,6 @@ function OBB(min, max, lookAt, translate) {
     this.oPosition = this.position.clone();
     this.z = { min: 0, max: 0 };
 }
-
-OBB.prototype.constructor = OBB;
 
 OBB.prototype.update = function update() {
     this.updateMatrixWorld(true);

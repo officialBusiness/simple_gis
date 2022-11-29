@@ -25,7 +25,7 @@ export default class Earth{
 	#layer = null
 
 	constructor(){
-		this.#minLevel = 1;
+		this.#minLevel = 4;
 		this.#maxLevel = 16;
 		this.#terrain = new Group();
 
@@ -38,6 +38,8 @@ export default class Earth{
 		this.#rootTile = createRootTile();
 
 		this.#layer = [];
+
+		this.position = this.#terrain.position;
 
 		let levelStack = [this.#rootTile];
 		while(levelStack.length > 0){
@@ -70,23 +72,31 @@ export default class Earth{
 	}
 	update(camera){
 		// console.log('update');
-		let tempStack = [];
-		this.#baseTile.forEach((tile)=>{
-			let subVisible = subdivision(
-				camera,
-				tile,
-				this.minLevel,
-				this.maxLevel
-			);
+		// let tempStack = [];
+		// this.#baseTile.forEach((tile)=>{
+		// 	let subVisible = subdivision(
+		// 		camera,
+		// 		tile,
+		// 		this.minLevel,
+		// 		this.maxLevel
+		// 	);
 
-			if( subVisible ){
-				tile.getChildren().forEach((child)=>{
-					tempStack.push(child);
-				});
-			}
-		});
+		// 	if( subVisible ){
+		// 		tile.getChildren().forEach((child)=>{
+		// 			tempStack.push(child);
+		// 		});
+		// 	}
+		// });
 
-		console.log('tempStack:', tempStack);
+		// console.log('tempStack:', tempStack);
+	}
+
+	getTerrain(){
+		return this.#terrain;
+	}
+
+	setCoord(longitude, latitude, height){
+
 	}
 
 	#addLoadTexture(tile){
@@ -119,6 +129,7 @@ export default class Earth{
 		}
 	}
 
+	
 }
 
 

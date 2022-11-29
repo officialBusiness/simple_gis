@@ -26,7 +26,9 @@ export default class Tile{
 
 		this.geometricError = this.mesh.geometry.boundingSphere.radius / 256;
 
-		this.OBB = OBB.extentToOBB(x, y, z);
+		// this.OBB = OBB.extentToOBB(x, y, z);
+		// this.mesh.add(this.OBB);
+		// this.OBB.init();
 	}
 	getChildren(){
 		if( this.#children === null ){

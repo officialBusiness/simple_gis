@@ -22,7 +22,8 @@
 		<script type="module">
 			import * as THREE from 'three';
 			import Stats from 'jsm/libs/stats.module.js';
-			import { OrbitControls } from 'jsm/controls/OrbitControls.js';
+			import GlobeControls from '../src/earth/controls/globe_controls.js';
+			import { OrbitControls } from '../src.old/core/orbit_controls.js';
 
 			import Earth from '../src.old/earth/earth.js';
 
@@ -43,9 +44,6 @@
 			camera.up.set(0,0,1);
 			camera.position.set(0, 13500000, 0);
 
-			const orbitControls = new OrbitControls( camera, renderer.domElement );
-			orbitControls.target.set(0, 0, 0);
-
 			window.addEventListener( 'resize', onWindowResize );
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
@@ -55,6 +53,15 @@
 			}
 
 			let earth = new Earth().mountScene(scene);
+
+			// const globeControls = new GlobeControls( camera, earth, renderer.domElement );
+
+			const orbitControls = new OrbitControls( camera, renderer.domElement );
+
+			orbitControls.target.z = 0;
+			camera.lookAt(0,0,0);
+			// camera.lookAt(0,0,10000000);
+			window.scene = scene;
 
 			const stats = new Stats();
 			document.body.appendChild( stats.dom );
