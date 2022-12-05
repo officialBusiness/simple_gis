@@ -22,10 +22,10 @@
 		<script type="module">
 			import * as THREE from 'three';
 			import Stats from 'jsm/libs/stats.module.js';
-			import GlobeControls from '../src/earth/controls/globe_controls.js';
+			import GlobeControls from '../src.old/core/globe_controls.js';
 			import { OrbitControls } from '../src.old/core/orbit_controls.js';
 
-			import Earth from '../src.old/earth/earth.js';
+			import Earth from '../src/earth/earth.js';
 
 
 			const renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -35,6 +35,7 @@
 			document.body.appendChild( renderer.domElement );
 
 			const scene = new THREE.Scene();
+			window.scene = scene;
 
 			scene.add( new THREE.AxesHelper( 500 ) );
 
@@ -42,7 +43,8 @@
 
 			const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000000000 );
 			camera.up.set(0,0,1);
-			camera.position.set(0, 13500000, 0);
+			camera.position.set(0, 0, 13500000);
+			window.camera = camera;
 
 			window.addEventListener( 'resize', onWindowResize );
 			function onWindowResize() {
@@ -57,11 +59,6 @@
 			// const globeControls = new GlobeControls( camera, earth, renderer.domElement );
 
 			const orbitControls = new OrbitControls( camera, renderer.domElement );
-
-			orbitControls.target.z = 0;
-			camera.lookAt(0,0,0);
-			// camera.lookAt(0,0,10000000);
-			window.scene = scene;
 
 			const stats = new Stats();
 			document.body.appendChild( stats.dom );

@@ -26,7 +26,7 @@ export default class Earth{
 
 	constructor(){
 		this.#minLevel = 4;
-		this.#maxLevel = 16;
+		this.#maxLevel = 20;
 		this.#terrain = new Group();
 
 		this.#readyStack = [];
@@ -47,13 +47,12 @@ export default class Earth{
 			if( tile.z < this.#minLevel ){
 				let children = tile.getChildren();
 				if( tile.z === this.#minLevel - 1 ){
-					children.forEach((child)=>{
-						this.#baseTile.push(child);
+					children.forEach((child, index)=>{
 						this.#addLoadTexture(child);
 					});
 				}else{
-					children.forEach((child)=>{
-						levelStack.push(child);
+					children.forEach((child, index)=>{
+							levelStack.push(child);
 					});
 				}
 			}
@@ -71,24 +70,41 @@ export default class Earth{
 
 	}
 	update(camera){
-		// console.log('update');
-		// let tempStack = [];
-		// this.#baseTile.forEach((tile)=>{
-		// 	let subVisible = subdivision(
-		// 		camera,
-		// 		tile,
-		// 		this.minLevel,
-		// 		this.maxLevel
-		// 	);
+		let
+			count = 100,
+			index = 0,
 
-		// 	if( subVisible ){
-		// 		tile.getChildren().forEach((child)=>{
-		// 			tempStack.push(child);
-		// 		});
-		// 	}
-		// });
+			subVisible = true,
+			// tile = this.#rootTile,
+			stack = [this.#rootTile],
+			maxLevel = 10,
+			level = this.#minLevel;
+		// while(level < maxLevel){
+		// for( let i = 0; i < 10; i++ ){
 
-		// console.log('tempStack:', tempStack);
+		while(stack.length > 0 && index < count){
+			let tile = stack.pop();
+			subVisible = subdivision(
+				camera,
+				tile,
+				this.minLevel,
+				this.maxLevel
+			);
+			if( subVisible ){
+				// console.log('tile:', tile);
+				tile.getChildren().forEach((child)=>{
+					this.#addLoadTexture(child);
+					stack.push(child);
+				});
+			}
+			index ++;
+		}
+		// }
+			// // console.log('tile:', tile, 'subVisible:', subVisible);
+			// index ++;
+			// tile = tile.getChildren();
+		// }
+
 	}
 
 	getTerrain(){
@@ -201,8 +217,9 @@ function subdivision(
 	        	tile.centerSphere
         	) - boundingSphere.radius
         );
-
+ 	// console.log('distance:', distance);
   // pre-horizon culling
+  // console.log('wgs84:', wgs84);
   const cV = new Vector3().copy(camera.position).divide(wgs84);
   const vhMagnitudeSquared = cV.lengthSq() - 1.0;
   const canvasSize = new Vector2(window.innerWidth, window.innerHeight);
@@ -216,5 +233,6 @@ function subdivision(
 
   const preSSE = hypotenuse * (2.0 * Math.tan(HYFOV * 0.5));
   // console.log('preSSE:', preSSE);
+  // console.log('geometricError:', tile.geometricError);
   return sseThreshold < preSSE * (tile.geometricError / distance);
 }

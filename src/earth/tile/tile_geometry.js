@@ -3,7 +3,7 @@ import {
 	Float32BufferAttribute
 } from 'three';
 
-import Coordinates from '../geographic/coordinates.js';
+import Coordinates from '../coordinates/coordinates.js';
 
 export default class TileGeometry extends BufferGeometry{
 	constructor(column, row, level){
@@ -73,7 +73,7 @@ export default class TileGeometry extends BufferGeometry{
 			(minLatitude + maxLatitude) / 2
 		);
 
-		this.computeBoundingBox();
+		// this.computeBoundingBox();
 		this.computeBoundingSphere();
 	}
 }

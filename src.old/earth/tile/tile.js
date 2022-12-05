@@ -18,11 +18,12 @@ export default class Tile{
 			this.parent = parent;
 		}
 
-
-		this.centerSphere = new Vector3().addVectors(
-			this.mesh.geometry.boundingSphere.center,
-			this.mesh.geometry.center
-		)
+		// console.log('this.mesh.geometry.center:', this.mesh.geometry.center);
+		this.centerSphere = this.mesh.geometry.boundingSphere.center;
+		// = new Vector3().addVectors(
+		// 	this.mesh.geometry.boundingSphere.center,
+		// 	this.mesh.geometry.center
+		// )
 
 		this.geometricError = this.mesh.geometry.boundingSphere.radius / 256;
 
@@ -62,6 +63,7 @@ export default class Tile{
 		return this.#children;
 	}
 	setTexture(texture){
+		// console.log(texture)
 		this.mesh.material.map = texture;
 		return this;
 	}
