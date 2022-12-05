@@ -20,6 +20,7 @@ export default class Earth{
 		maxLevel: 20,
 		scheduler: new Scheduler(),
 		provider: new BingProvider(),
+		ellipse: wgs84
 	}){
 		this.#terrain = new Group();
 
@@ -42,6 +43,8 @@ export default class Earth{
 		this.#minLevel = options.minLevel;
 
 		this.#maxLevel = options.maxLevel;
+
+		this.#ellipse = ellipse;
 
 		this.#initBaseTile();
 	}
