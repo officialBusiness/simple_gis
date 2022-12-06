@@ -1,12 +1,13 @@
 import {
 	BufferGeometry,
-	Float32BufferAttribute
+	Float32BufferAttribute,
+	Vector3
 } from 'three';
 
 import Coordinates from '../coordinates/coordinates.js';
 
 export default class TileGeometry extends BufferGeometry{
-	constructor(column, row, level){
+	constructor(extent, level){
 		super();
 		this.type = 'TileGeometry';
 
@@ -15,10 +16,7 @@ export default class TileGeometry extends BufferGeometry{
 		const uvs = [];
 
 		let
-			minLongitude = Coordinates.getLongitudeByTileOrder( column, level ),
-			maxLongitude = Coordinates.getLongitudeByTileOrder( column + 1, level ),
-			minLatitude = Coordinates.getLatitudeByTileOrder( row + 1, level ),
-			maxLatitude = Coordinates.getLatitudeByTileOrder( row, level ),
+			{ minLongitude, maxLongitude, minLatitude, maxLatitude } = extent,
 
 			minMercatorX = Coordinates.getMercatorXByLongitude(minLongitude),
 			maxMercatorX = Coordinates.getMercatorXByLongitude(maxLongitude),
@@ -37,12 +35,12 @@ export default class TileGeometry extends BufferGeometry{
 			let latitude = Coordinates.getLatitudeByMercatorY( maxMercatorY - i * deltaY ),
 					v = 1 - i * deltaV;
 			for( let j = 0; j <= wSegment; j++ ){
-				let { x, y, z } = Coordinates.getCartesianByLL(
+				let vector = Coordinates.getCartesianByLL(
 					Coordinates.getLongitudeByMercatorX( minMercatorX + j * deltaX ),
 					latitude
 				);
-
-				vertices.push(x, y, z);
+				extent.vectors.push(vector);
+				vertices.push(vector.x, vector.y, vector.z);
 				uvs.push( j * deltaU, v );
 			}			
 		}
@@ -66,12 +64,6 @@ export default class TileGeometry extends BufferGeometry{
 		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
 		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
 		this.setIndex(indices);
-
-
-		this.center = Coordinates.getCartesianByLL(
-			(minLongitude + maxLongitude) / 2, 
-			(minLatitude + maxLatitude) / 2
-		);
 
 		// this.computeBoundingBox();
 		this.computeBoundingSphere();

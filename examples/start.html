@@ -22,10 +22,10 @@
 		<script type="module">
 			import * as THREE from 'three';
 			import Stats from 'jsm/libs/stats.module.js';
-			import GlobeControls from '../src.old/core/globe_controls.js';
-			import { OrbitControls } from '../src.old/core/orbit_controls.js';
+			import GlobeControls from '../src/earth/controls/globe_controls.js';
+			import { OrbitControls } from '../src/earth/controls/orbit_controls.js';
 
-			import Earth from '../src.old/earth/earth.js';
+			import Earth from '../src/earth/earth.js';
 
 
 			const renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -54,7 +54,9 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 
-			let earth = new Earth().mountScene(scene);
+			let earth = new Earth({
+				scene
+			});
 
 			// const globeControls = new GlobeControls( camera, earth, renderer.domElement );
 

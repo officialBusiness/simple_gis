@@ -1,0 +1,10 @@
+
+export default {
+	READY: 0,
+	IMAGELOADING: 1,
+	IMAGELOADED: 2,
+	IMAGEFAILED: 3,
+	BASE: 4,
+	SHOW: 5,
+	STORE: 6
+}
