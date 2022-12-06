@@ -130,7 +130,7 @@ function subIsVision(
 	tile,
 	minLevel,
 	maxLevel,
-	sseThreshold = 1
+	sseThreshold = 5
 ){
 	if ( tile.z === 0 || tile.z < minLevel) {
     return true;
@@ -155,10 +155,6 @@ function subIsVision(
         0.0,
         camera.position.distanceTo(center) - 
         boundingSphere.radius);
-
-  console.log('see:', preSSE * (tile.geometricError / distance) );
-  console.log('sseThreshold:', sseThreshold );
-  
 
   return sseThreshold < preSSE * (tile.geometricError / distance);
 	// return true;
