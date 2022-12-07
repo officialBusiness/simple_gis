@@ -1,6 +1,6 @@
 import { Group, TextureLoader, Frustum, Matrix4, Vector2 } from 'three';
 import TileState from '../tile/tile_state.js';
-import { wgs84 } from '../coordinates/coordinates.js';
+import Coordinates, { wgs84 } from '../coordinates/coordinates.js';
 
 import tile, { createRootTile } from '../tile/tile.js';
 
@@ -18,6 +18,7 @@ export default class Terrain{
 	#waitStack = [];
 	#isLoading = false;
 	#provider = null;
+	#originMatrix = null;
 
 	constructor(provider, minLevel, maxLevel){
 		this.#tiles = new Group();
@@ -45,8 +46,8 @@ export default class Terrain{
 			tile;
 		while( tile = stack.pop() ){
 			// console.log('tile:', tile);
-			// console.log('tileIsVision(camera, tile):', tileIsVision(camera, tile));
-			if( tileIsVision(camera, tile) ){
+			console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile, this.#originMatrix));
+			if( tileIsVision(camera, tile, this.#originMatrix) ){
 				// console.log('tile:', tile);
 				switch( tile.state ){
 					case TileState.READY:
@@ -57,6 +58,7 @@ export default class Terrain{
 					case TileState.IMAGEFAILED:
 					case TileState.BASE:
 					case TileState.SHOW:
+						console.log('不加载');
 						break;
 					case TileState.IMAGELOADED:
 					case TileState.STORE:
@@ -68,7 +70,7 @@ export default class Terrain{
 				}
 
 				if( subIsVision(camera, tile, this.#minLevel, this.#maxLevel) ){
-					// console.log('subIsVision(camera, tile, this.#minLevel, this.#maxLevel):', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
+					console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
 					tile.getChildren().forEach((child)=>{
 						stack.push(child);
 					});
@@ -76,6 +78,12 @@ export default class Terrain{
 			}
 		}
 		console.timeEnd('showTiles');
+		return this;
+	}
+
+	applyMatrix4(matrix){
+		this.#tiles.applyMatrix4(matrix);
+		this.#originMatrix = matrix;
 		return this;
 	}
 
@@ -123,6 +131,7 @@ export default class Terrain{
 		}
 	}
 
+
 }
 
 function subIsVision(
@@ -160,26 +169,39 @@ function subIsVision(
 	// return true;
 }
 
-function tileIsVision(camera, tile){
+function tileIsVision(camera, tile, originMatrix){
 	if( tile.z === 0 ){
 		return true;
 	}
 
 	let
-		boundingSphere = tile.mesh.geometry.boundingSphere,
+		boundingSphere = tile.mesh.geometry.boundingSphere.clone(),
 		points = tile.cornersVector;
 
-	_frustum.setFromProjectionMatrix( _matrix.multiplyMatrices( camera.projectionMatrix,camera.matrixWorldInverse ) )
-	// console.log('_frustum.intersectsSphere(boundingSphere):', _frustum.intersectsSphere(boundingSphere));
+
+	_frustum.setFromProjectionMatrix( _matrix.multiplyMatrices( camera.projectionMatrix,camera.matrixWorldInverse ) );
+
+	// boundingSphere.center.applyMatrix4(originMatrix)
 	if( _frustum.intersectsSphere(boundingSphere) ){
+	// if( _frustum.intersectsObject(tile.mesh) ){
+		// return true;
 		let vectors = tile.extent.vectors;
 		for( let i = 0, len = vectors.length; i < len; i++ ){
 
-			let v = camera.position.clone().sub( vectors[i] ),
-				angle = v.angleTo( vectors[i] );
+			let
+				// n = vectors[i].clone().applyMatrix4(originMatrix),
+				n = Coordinates.getCartesianNormal( vectors[i].x, vectors[i].y, vectors[i].z ),
+				// n = vectors[i].clone(),
+				v = camera.position.clone().sub( n ),
+				angle = v.angleTo( n );
 
-			if( _frustum.containsPoint( vectors[i] ) &&
-					angle <= Math.PI / 2){
+			// console.log('_frustum.containsPoint( vectors[i] ):', _frustum.containsPoint( vectors[i] ));
+			// console.log('angle:', angle / Math.PI * 180);
+			if( 
+					// _frustum.intersectsSphere(boundingSphere)
+					// && 
+						angle <= Math.PI / 2 
+					){
 				return true;
 			}
 		}

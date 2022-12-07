@@ -1,12 +1,12 @@
 import {
 	Mesh,
 	MeshBasicMaterial,
-	// ArrowHelper,
-	// Vector3,
-	// BoxGeometry,
-	// BufferGeometry,
-	// LineBasicMaterial,
-	// Line
+	ArrowHelper,
+	Vector3,
+	BoxGeometry,
+	BufferGeometry,
+	LineBasicMaterial,
+	Line
 } from 'three';
 import TileState from '../tile/tile_state.js';
 import TileGeometry from './tile_geometry.js';
@@ -71,7 +71,9 @@ export default class Tile{
 		this.state = TileState.READY;
 
 		// for( let key in this.cornersVector ){
-		// 	let value = this.cornersVector[key];
+			// let value = this.cornersVector[key];
+		// for( let i = 0, len = this.extent.vectors.length; i < len; i++ ){
+		// 	let value = this.extent.vectors[i];
 		// 	// this.mesh.add( new ArrowHelper(
 		// 	// 	value.clone(),
 		// 	// 	value.clone(),

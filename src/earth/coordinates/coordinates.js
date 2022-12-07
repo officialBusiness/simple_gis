@@ -21,6 +21,7 @@ export default {
 							)
 						) * 180 / Math.PI;
 	},
+
 	// getTileOrderByLL(longitude, latitude, level){
 
  //    let
@@ -58,7 +59,7 @@ export default {
 			(N * (1 - (e * e)) + height) * Math.sin(latitude * Math.PI / 180)
 		)
 	},
-	getLLByCartesian( x, y, z, a = wgs84.x, b = wgs84.z){
+	getLLByCartesian( x, y, z, a = wgs84.x, b = wgs84.z ){
 		let
 			e = Math.sqrt( a * a - b * b ) / a,
 			eprime = Math.sqrt( a * a - b * b ) / b,
@@ -80,4 +81,11 @@ export default {
 		}
 	},
 
+	getCartesianNormal(x, y, z, a = wgs84.x, b = wgs84.z){
+		return new Vector3(
+			x / a / a,
+			y / a / a,
+			z / b / b
+		).normalize();
+	}
 }
