@@ -46,8 +46,8 @@ export default class Terrain{
 			tile;
 		while( tile = stack.pop() ){
 			// console.log('tile:', tile);
-			console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile, this.#originMatrix));
-			if( tileIsVision(camera, tile, this.#originMatrix) ){
+			// console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile));
+			if( tileIsVision(camera, tile) ){
 				// console.log('tile:', tile);
 				switch( tile.state ){
 					case TileState.READY:
@@ -58,7 +58,7 @@ export default class Terrain{
 					case TileState.IMAGEFAILED:
 					case TileState.BASE:
 					case TileState.SHOW:
-						console.log('不加载');
+						// console.log('不加载');
 						break;
 					case TileState.IMAGELOADED:
 					case TileState.STORE:
@@ -70,7 +70,7 @@ export default class Terrain{
 				}
 
 				if( subIsVision(camera, tile, this.#minLevel, this.#maxLevel) ){
-					console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
+					// console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
 					tile.getChildren().forEach((child)=>{
 						stack.push(child);
 					});
@@ -166,10 +166,9 @@ function subIsVision(
         boundingSphere.radius);
 
   return sseThreshold < preSSE * (tile.geometricError / distance);
-	// return true;
 }
 
-function tileIsVision(camera, tile, originMatrix){
+function tileIsVision(camera, tile){
 	if( tile.z === 0 ){
 		return true;
 	}
@@ -178,10 +177,8 @@ function tileIsVision(camera, tile, originMatrix){
 		boundingSphere = tile.mesh.geometry.boundingSphere.clone(),
 		points = tile.cornersVector;
 
-
 	_frustum.setFromProjectionMatrix( _matrix.multiplyMatrices( camera.projectionMatrix,camera.matrixWorldInverse ) );
 
-	// boundingSphere.center.applyMatrix4(originMatrix)
 	if( _frustum.intersectsSphere(boundingSphere) ){
 	// if( _frustum.intersectsObject(tile.mesh) ){
 		// return true;
@@ -189,9 +186,7 @@ function tileIsVision(camera, tile, originMatrix){
 		for( let i = 0, len = vectors.length; i < len; i++ ){
 
 			let
-				// n = vectors[i].clone().applyMatrix4(originMatrix),
 				n = Coordinates.getCartesianNormal( vectors[i].x, vectors[i].y, vectors[i].z ),
-				// n = vectors[i].clone(),
 				v = camera.position.clone().sub( n ),
 				angle = v.angleTo( n );
 

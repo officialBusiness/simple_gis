@@ -83,9 +83,9 @@ export default {
 
 	getCartesianNormal(x, y, z, a = wgs84.x, b = wgs84.z){
 		return new Vector3(
-			x / a / a,
-			y / a / a,
-			z / b / b
+			x / a,
+			y / a,
+			z / b
 		).normalize();
 	}
 }

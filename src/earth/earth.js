@@ -6,6 +6,8 @@ import Terrain from './terrain/Terrain.js';
 import BingProvider from './provider/bing_provider.js';
 import Coordinates from './coordinates/coordinates.js';
 
+let _camera = null; 
+
 export default class Earth{
 	#terrain = null;
 
@@ -44,12 +46,39 @@ export default class Earth{
 		).invert();
 
 		this.#terrain.applyMatrix4(matrix);
+		this.matrix = matrix;
+		this.matrixInv = matrix.clone().invert();
 		return this;
 	}
 
 	update(camera){
-		this.#terrain.showTiles(camera);
+		_camera = camera.clone();
+		_camera.applyMatrix4(this.matrixInv);
+		// _camera.updateMatrix();
+		// _camera.updateMatrixWorld();
+		_camera.updateWorldMatrix();
+
+		this.#terrain.showTiles(_camera);
+
+
+		// this.#terrain.applyMatrix4(this.matrix);
+		// camera.applyMatrix4(this.matrix);
+
 		return this;
 	}
+
+	updateT(camera){
+		// _camera = camera.clone();
+		// _camera.applyMatrix4(this.matrixInv);
+
+		// this.#terrain.showTiles(camera);
+
+		// _camera = camera.clone();
+		this.#terrain.applyMatrix4(this.matrixInv);
+		camera.applyMatrix4(this.matrixInv);
+
+		return this;
+	}
+
 
 }
