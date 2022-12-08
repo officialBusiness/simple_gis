@@ -39,9 +39,28 @@ export default class TileGeometry extends BufferGeometry{
 					Coordinates.getLongitudeByMercatorX( minMercatorX + j * deltaX ),
 					latitude
 				);
-				extent.vectors.push(vector);
 				vertices.push(vector.x, vector.y, vector.z);
 				uvs.push( j * deltaU, v );
+				if( i > 0 && j > 0 ){
+					// console.log(vertices.length);
+					let
+						// leftIndex = (i * wSegment + j - 1) * 3,
+						leftIndex = vertices.length - 6,
+						left = new Vector3( vertices[leftIndex], vertices[leftIndex + 1], vertices[leftIndex + 2] ),
+						// topIndex = ((i - 1) * wSegment + j) * 3,
+						topIndex = vertices.length - wSegment * 3 - 6,
+						top = new Vector3( vertices[topIndex], vertices[topIndex + 1], vertices[topIndex + 2] );
+						// top = vector;
+
+					extent.vectors.push( vector );
+					extent.centers.push( left.add(top).divideScalar(2) );
+					// extent.centers.push( top );
+					// extent.centers.push( left );
+					extent.normals.push(new Vector3().crossVectors(
+						vector.clone().sub( top ),
+						vector.clone().sub( left )
+					).normalize());
+				}
 			}			
 		}
 

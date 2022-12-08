@@ -46,7 +46,7 @@ export default class Terrain{
 			tile;
 		while( tile = stack.pop() ){
 			// console.log('tile:', tile);
-			// console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile));
+			console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile));
 			if( tileIsVision(camera, tile) ){
 				// console.log('tile:', tile);
 				switch( tile.state ){
@@ -70,7 +70,7 @@ export default class Terrain{
 				}
 
 				if( subIsVision(camera, tile, this.#minLevel, this.#maxLevel) ){
-					// console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
+					console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
 					tile.getChildren().forEach((child)=>{
 						stack.push(child);
 					});
@@ -182,15 +182,17 @@ function tileIsVision(camera, tile){
 	if( _frustum.intersectsSphere(boundingSphere) ){
 	// if( _frustum.intersectsObject(tile.mesh) ){
 		// return true;
-		let vectors = tile.extent.vectors;
-		for( let i = 0, len = vectors.length; i < len; i++ ){
+		let normals = tile.extent.centers;
+		// console.log('normals:', normals);
+		for( let i = 0, len = normals.length; i < len; i++ ){
 
 			let
-				n = Coordinates.getCartesianNormal( vectors[i].x, vectors[i].y, vectors[i].z ),
+				// n = Coordinates.getCartesianNormal( normals[i].x, normals[i].y, normals[i].z ),
+				n = normals[i],
 				v = camera.position.clone().sub( n ),
 				angle = v.angleTo( n );
 
-			// console.log('_frustum.containsPoint( vectors[i] ):', _frustum.containsPoint( vectors[i] ));
+			// console.log('_frustum.containsPoint( normals[i] ):', _frustum.containsPoint( normals[i] ));
 			// console.log('angle:', angle / Math.PI * 180);
 			if( 
 					// _frustum.intersectsSphere(boundingSphere)

@@ -40,6 +40,8 @@ export default class Tile{
 			maxLongitude: Coordinates.getLongitudeByTileOrder( x + 1, z ),
 			minLatitude: Coordinates.getLatitudeByTileOrder( y + 1, z ),
 			maxLatitude: Coordinates.getLatitudeByTileOrder( y, z ),
+			normals: [],
+			centers: [],
 			vectors: []
 		}
 
@@ -71,9 +73,10 @@ export default class Tile{
 		this.state = TileState.READY;
 
 		// for( let key in this.cornersVector ){
-			// let value = this.cornersVector[key];
-		// for( let i = 0, len = this.extent.vectors.length; i < len; i++ ){
-		// 	let value = this.extent.vectors[i];
+		// 	let value = this.cornersVector[key];
+		// for( let i = 0, len = this.extent.centers.length; i < len; i++ ){
+		// 	let normal = this.extent.normals[i],
+		// 			center = this.extent.centers[i];
 		// 	// this.mesh.add( new ArrowHelper(
 		// 	// 	value.clone(),
 		// 	// 	value.clone(),
@@ -85,8 +88,8 @@ export default class Tile{
 		// 	});
 
 		// 	let points = [];
-		// 	points.push( value.clone() );
-		// 	points.push( value.clone().multiplyScalar ( 1.12 ) );
+		// 	points.push( center.clone() );
+		// 	points.push( center.clone().add(normal.clone().multiplyScalar ( 120000 )) );
 		// 	// points.push( new Vector3(0,0,0) );
 
 		// 	let lineGeometry = new BufferGeometry().setFromPoints( points );
@@ -94,17 +97,20 @@ export default class Tile{
 		// 	let line = new Line( lineGeometry, lineMaterial );
 		// 	this.mesh.add( line );
 
-		// 	let cube = new Mesh(
-		// 								new BoxGeometry( 20000, 20000, 20000 ),
-		// 								new MeshBasicMaterial( {color: 0xff0000} ) 
-		// 							);
-		// 	cube.position.copy(value);
-		// 	this.mesh.add(cube);
+		// 	// let cube = new Mesh(
+		// 	// 							new BoxGeometry( 60000, 60000, 60000 ),
+		// 	// 							new MeshBasicMaterial( {color: 0xff0000} ) 
+		// 	// 						);
+		// 	// cube.position.copy(center);
+		// 	// this.mesh.add(cube);
 		// }
 
 	}
 
 	getChildren(){
+		// if( this.z > 1 ){
+		// 	return [];
+		// }
 		if( this.#children === null ){
 			this.#children = [
 				new Tile(
