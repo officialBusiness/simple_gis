@@ -20,6 +20,9 @@ h1, h2, h3, h4, h5, h6 {
 textarea, canvas, input{
   display: block;
 }
+body{
+  overflow: hidden;
+}
 
 .simple_gis{
   width: 100%;
