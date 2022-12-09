@@ -87,6 +87,11 @@ export default class Terrain{
 		return this;
 	}
 
+	add(obj){
+		this.#tiles.add(obj);
+		return this;
+	}
+	
 	#initBaseTiles(){
 		this.#rootTile.forEach((child)=>{
 			child.traverse((tile)=>{

@@ -56,7 +56,7 @@ export default class Tile{
 		// index %= 4;
 		let geometry = new TileGeometry( this.extent, z ),
 				material = new MeshBasicMaterial({
-					depthTest: false,
+					// depthTest: false,
 					color: 0xffffff,
 					// color: index === 0 ? 0xff0000 :
 					// 			index === 1 ? 0xffff00 :
@@ -67,6 +67,7 @@ export default class Tile{
 
 		this.mesh = new Mesh( geometry, material );
 		this.mesh.name = `${x}-${y}-${z}`;
+		// this.mesh.renderOrder = z;
 
 		this.centerSphere = this.mesh.geometry.boundingSphere.center;
 		this.geometricError = this.mesh.geometry.boundingSphere.radius / 256;
