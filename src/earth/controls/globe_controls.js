@@ -106,30 +106,23 @@ export default class GlobeControls{
 			_nowMouse.x = ( event.offsetX / domElement.offsetWidth ) * 2 - 1;
 			_nowMouse.y = - ( event.offsetY / domElement.offsetHeight ) * 2 + 1;
 
-			// if( state === STATE.PAN ){
+			if( state === STATE.PAN ){
 
-			// }else if( state === STATE.ZOOM ){
+			}else if( state === STATE.ZOOM ){
 
-			// }else if( state = STATE.ROTATE ){
+			}else if( state = STATE.ROTATE ){
 
 				let
-					rZ = ( _nowMouse.x - _startMouse.x ) * Math.PI / 4,
+					rZ = ( _nowMouse.x - _startMouse.x ) * Math.PI / 2,
 					rX = ( _nowMouse.y - _startMouse.y ) * Math.PI / 2;
 
-				// console.log('_startMouse:', _startMouse);
-				// console.log('_nowMouse:', _nowMouse);
-				// console.log('rX:', rX);
-				// console.log('rZ:', rZ);
-
-				// gisCamera.rotation.x = rX;
 
 				if( intersection ){
-					// console.log('intersection:', intersection);
-
+					
 					let
 						v = gisCamera.position.clone().sub(intersection);
 
-					console.log(v.length());
+					// console.log(v.length());
 					cameraPsotion.copy( gisCamera.position );
 
 					_quaternion.setFromAxisAngle( xAxis, nowXAngle - rX );
@@ -146,12 +139,39 @@ export default class GlobeControls{
 					gisCamera.position.copy(cameraPsotion);
 
 					nowXAngle = rX;
+
+
+					earthCenter.set(0, 0, 0).applyMatrix4(coordinatesMatrix);
+
+					let axis = intersection.clone().sub(earthCenter);
+					axis.normalize();
+
+					_quaternion.setFromAxisAngle( axis, nowZAngle - rZ );
+
+					v = gisCamera.position.clone().sub(intersection);
+
+					cameraPsotion.sub( v );
+					v.applyQuaternion( _quaternion );
+					cameraPsotion.add( v );
+
+					xAxis.applyQuaternion(_quaternion);
+					yAxis.applyQuaternion(_quaternion);
+					zAxis.applyQuaternion(_quaternion);
+
+					gisCamera.applyQuaternion(_quaternion);
+					gisCamera.position.copy(cameraPsotion);
+
+					nowZAngle = rZ;
+
+					// console.log('gisCamera.position:', JSON.stringify(gisCamera.position, null, 4))
+					// console.log('gisCamera.rotation:', JSON.stringify(gisCamera.rotation, null, 4))
+					// console.log('axis:', JSON.stringify(axis.normalize(), null, 4))
 				}else{
 
 
 				}
 
-			// }
+			}
 
 		}
 
@@ -166,6 +186,7 @@ export default class GlobeControls{
       domElement.removeEventListener( 'pointerup', onPointerUp );
 
       nowXAngle = 0;
+      nowZAngle = 0;
 		}
 
 		function onMouseWheel( event ) {
