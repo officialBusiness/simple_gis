@@ -11,6 +11,7 @@ let _camera = null;
 
 export default class Earth{
 	#terrain = null;
+	#scene = null;
 
 	constructor(options = {}){
 		let
@@ -21,6 +22,7 @@ export default class Earth{
 		this.#terrain = new Terrain(provider, minLevel, maxLevel);
 
 		if( options.scene ){
+			this.#scene = scene;
 			this.#terrain.mountScene(options.scene);
 		}
 
@@ -50,7 +52,7 @@ export default class Earth{
 			east.z, north.z, up.z, cartesian.z,
 			0, 0, 0, 1,
 		).invert();
-		
+
 		this.#terrain.applyMatrix4(matrix);
 		this.matrix = matrix;
 		this.matrixInv = matrix.clone().invert();
@@ -71,7 +73,7 @@ export default class Earth{
 	}
 
 	add(obj){
-		this.#terrain.add(obj);
+		this.#scene.add(obj);
 		return this;
 	}
 
@@ -81,9 +83,19 @@ export default class Earth{
 		ray.origin.applyMatrix4(this.matrixInv);
 		ray.direction.applyMatrix4(this.matrixInv);
 
+		// return GisMath.getEllipseIntersection(
+		// 	this.ellipse.x, this.ellipse.y, this.ellipse.z,
+		// 	ray.origin, ray.direction, this.matrix
+		// );
+
+		return this.getRayIntersection(ray.origin, ray.direction);
+	}
+
+	getRayIntersection(origin, direction){
+
 		return GisMath.getEllipseIntersection(
 			this.ellipse.x, this.ellipse.y, this.ellipse.z,
-			ray.origin, ray.direction, this.matrix
+			origin, direction, this.matrix
 		);
 	}
 

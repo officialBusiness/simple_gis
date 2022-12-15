@@ -46,7 +46,7 @@ export default class Terrain{
 			tile;
 		while( tile = stack.pop() ){
 			// console.log('tile:', tile);
-			console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile));
+			// console.log(tile.mesh.name, 'tileIsVision:', tileIsVision(camera, tile));
 			if( tileIsVision(camera, tile) ){
 				// console.log('tile:', tile);
 				switch( tile.state ){
@@ -70,7 +70,7 @@ export default class Terrain{
 				}
 
 				if( subIsVision(camera, tile, this.#minLevel, this.#maxLevel) ){
-					console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
+					// console.log('subIsVision:', subIsVision(camera, tile, this.#minLevel, this.#maxLevel));
 					tile.getChildren().forEach((child)=>{
 						stack.push(child);
 					});

@@ -37,7 +37,8 @@ export default class TileGeometry extends BufferGeometry{
 			for( let j = 0; j <= wSegment; j++ ){
 				let vector = Coordinates.getCartesianByLL(
 					Coordinates.getLongitudeByMercatorX( minMercatorX + j * deltaX ),
-					latitude
+					latitude,
+					0.1 * level
 				);
 				vertices.push(vector.x, vector.y, vector.z);
 				uvs.push( j * deltaU, v );
