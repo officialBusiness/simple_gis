@@ -97,6 +97,8 @@ export default class GlobeControls{
 			}
 		}
 
+
+
 		function onPointerMove( event ) {
 
 			if ( this.enabled === false ) {
@@ -107,6 +109,48 @@ export default class GlobeControls{
 			_nowMouse.y = - ( event.offsetY / domElement.offsetHeight ) * 2 + 1;
 
 			if( state === STATE.PAN ){
+				console.log('******************************************');
+				
+				if( intersection ){
+
+					let
+						nowIntersection = earth.getMouseIntersection(gisCamera, _nowMouse);
+
+						if( nowIntersection ){
+
+							// console.log('nowIntersection:', nowIntersection);
+
+							earthCenter.set(0, 0, 0).applyMatrix4(coordinatesMatrix);
+							
+							console.log('earthCenter:', JSON.stringify(earthCenter));
+
+							cameraPsotion.copy(gisCamera.position);
+
+							let
+								sV = intersection.clone().sub(earthCenter),
+								eV = nowIntersection.clone().sub(earthCenter),
+								angle = sV.angleTo(eV),
+								axis = sV.clone().cross(eV).normalize(),
+
+								v = cameraPsotion.clone().sub(earthCenter);
+
+							// console.log('angle:', angle / Math.PI * 180);
+
+							_quaternion.setFromAxisAngle(axis, -angle);
+
+							cameraPsotion.sub(v);
+							v.applyQuaternion(_quaternion);
+							cameraPsotion.add(v);
+
+							gisCamera.applyQuaternion(_quaternion);
+							gisCamera.position.copy(cameraPsotion);
+
+							// console.log('cameraPsotion:', JSON.stringify(gisCamera.position));
+
+							intersection.copy(nowIntersection);
+						}
+
+				}
 
 			}else if( state === STATE.ZOOM ){
 
@@ -118,7 +162,7 @@ export default class GlobeControls{
 
 
 				if( intersection ){
-					
+
 					let
 						v = gisCamera.position.clone().sub(intersection);
 
