@@ -115,31 +115,31 @@ export default class GlobeControls{
 					let
 						nowIntersection = earth.getMouseIntersection(gisCamera, _nowMouse);
 
-						if( nowIntersection ){
+					if( nowIntersection ){
 
-							earthCenter.set(0, 0, 0).applyMatrix4(coordinatesMatrix);
-							
-							cameraPsotion.copy(gisCamera.position);
+						earthCenter.set(0, 0, 0).applyMatrix4(coordinatesMatrix);
+						
+						cameraPsotion.copy(gisCamera.position);
 
-							let
-								sV = intersection.clone().sub(earthCenter),
-								eV = nowIntersection.clone().sub(earthCenter),
-								angle = sV.angleTo(eV),
-								axis = sV.clone().cross(eV).normalize(),
+						let
+							sV = intersection.clone().sub(earthCenter),
+							eV = nowIntersection.clone().sub(earthCenter),
+							angle = sV.angleTo(eV),
+							axis = sV.clone().cross(eV).normalize(),
 
-								v = cameraPsotion.clone().sub(earthCenter);
+							v = cameraPsotion.clone().sub(earthCenter);
 
-							_quaternion.setFromAxisAngle(axis, -angle);
+						_quaternion.setFromAxisAngle(axis, -angle);
 
-							cameraPsotion.sub(v);
-							v.applyQuaternion(_quaternion);
-							cameraPsotion.add(v);
+						cameraPsotion.sub(v);
+						v.applyQuaternion(_quaternion);
+						cameraPsotion.add(v);
 
-							gisCamera.applyQuaternion(_quaternion);
-							gisCamera.position.copy(cameraPsotion);
+						gisCamera.applyQuaternion(_quaternion);
+						gisCamera.position.copy(cameraPsotion);
 
-							_startMouse.copy(_nowMouse);
-						}
+						_startMouse.copy(_nowMouse);
+					}
 
 				}
 
