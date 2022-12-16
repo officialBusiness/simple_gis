@@ -109,8 +109,7 @@ export default class GlobeControls{
 			intersection = earth.getMouseIntersection(gisCamera, _startMouse);
 
 			if( state === STATE.PAN ){
-				console.log('******************************************');
-				
+
 				if( intersection ){
 
 					let
@@ -118,12 +117,8 @@ export default class GlobeControls{
 
 						if( nowIntersection ){
 
-							// console.log('nowIntersection:', nowIntersection);
-
 							earthCenter.set(0, 0, 0).applyMatrix4(coordinatesMatrix);
 							
-							console.log('earthCenter:', JSON.stringify(earthCenter));
-
 							cameraPsotion.copy(gisCamera.position);
 
 							let
@@ -142,8 +137,6 @@ export default class GlobeControls{
 
 							gisCamera.applyQuaternion(_quaternion);
 							gisCamera.position.copy(cameraPsotion);
-
-							// console.log('cameraPsotion:', JSON.stringify(gisCamera.position));
 
 							_startMouse.copy(_nowMouse);
 						}
