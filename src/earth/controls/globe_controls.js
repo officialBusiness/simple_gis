@@ -97,8 +97,6 @@ export default class GlobeControls{
 			}
 		}
 
-
-
 		function onPointerMove( event ) {
 
 			if ( this.enabled === false ) {
@@ -107,6 +105,8 @@ export default class GlobeControls{
 
 			_nowMouse.x = ( event.offsetX / domElement.offsetWidth ) * 2 - 1;
 			_nowMouse.y = - ( event.offsetY / domElement.offsetHeight ) * 2 + 1;
+
+			intersection = earth.getMouseIntersection(gisCamera, _startMouse);
 
 			if( state === STATE.PAN ){
 				console.log('******************************************');
@@ -134,8 +134,6 @@ export default class GlobeControls{
 
 								v = cameraPsotion.clone().sub(earthCenter);
 
-							// console.log('angle:', angle / Math.PI * 180);
-
 							_quaternion.setFromAxisAngle(axis, -angle);
 
 							cameraPsotion.sub(v);
@@ -147,7 +145,7 @@ export default class GlobeControls{
 
 							// console.log('cameraPsotion:', JSON.stringify(gisCamera.position));
 
-							intersection.copy(nowIntersection);
+							_startMouse.copy(_nowMouse);
 						}
 
 				}
