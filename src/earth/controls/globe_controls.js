@@ -52,7 +52,7 @@ export default class GlobeControls{
 
 
 		earth.update(gisCamera);
-					
+
 		this.update = function () {
 
 		}
@@ -257,8 +257,9 @@ export default class GlobeControls{
 				let
 					cameraPsotionClone = cameraPsotion.clone().applyMatrix4(coordinatesMatrixInv),
 					cameraPsotionLL = Coordinates.getLLByCartesian(cameraPsotionClone.x, cameraPsotionClone.y, cameraPsotionClone.z);
-				// console.log(cameraPsotionLL)
-				if( event.deltaY < 0 && cameraPsotionLL.height < 100 ){
+				console.log(cameraPsotionLL)
+				if( ( event.deltaY < 0 && cameraPsotionLL.height < 100 ) ||
+					( event.deltaY > 0 && cameraPsotionLL.height > earth.getEllipse().x )){
 					return;
 				}
 				let

@@ -29,7 +29,10 @@
 			import GisCamera from '../src/core/camera.js';
 
 
-			const renderer = new THREE.WebGLRenderer( { antialias: true } );
+			const renderer = new THREE.WebGLRenderer( {
+				antialias: true,
+				// logarithmicDepthBuffer: true,
+			} );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setClearColor( 0xffffff, 1.0 );
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -76,12 +79,6 @@
 				renderer.render( scene, camera );
 			}
 
-			window.updateEarth = ()=>{
-				earth.update(camera);
-			}
-			window.updateTEarth = ()=>{
-				earth.updateT(camera);
-			}
 		</script>
 	</body>
 </html>

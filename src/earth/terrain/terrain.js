@@ -91,7 +91,7 @@ export default class Terrain{
 		this.#tiles.add(obj);
 		return this;
 	}
-	
+
 	#initBaseTiles(){
 		this.#rootTile.forEach((child)=>{
 			child.traverse((tile)=>{
@@ -199,11 +199,7 @@ function tileIsVision(camera, tile){
 
 			// console.log('_frustum.containsPoint( normals[i] ):', _frustum.containsPoint( normals[i] ));
 			// console.log('angle:', angle / Math.PI * 180);
-			if( 
-					// _frustum.intersectsSphere(boundingSphere)
-					// && 
-						angle <= Math.PI / 2 
-					){
+			if( angle <= Math.PI / 2 ){
 				return true;
 			}
 		}

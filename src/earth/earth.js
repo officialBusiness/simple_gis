@@ -102,15 +102,10 @@ export default class Earth{
 	update(camera){
 		_camera = camera.clone();
 		_camera.applyMatrix4(this.matrixInv);
-		// _camera.updateMatrix();
-		// _camera.updateMatrixWorld();
+
 		_camera.updateWorldMatrix();
 
 		this.#terrain.showTiles(_camera);
-
-
-		// this.#terrain.applyMatrix4(this.matrix);
-		// camera.applyMatrix4(this.matrix);
 
 		return this;
 	}
