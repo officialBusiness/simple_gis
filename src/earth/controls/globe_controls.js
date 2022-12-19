@@ -50,6 +50,9 @@ export default class GlobeControls{
 		this.enableZoom = true;
 		this.enabled = true;
 
+
+		earth.update(gisCamera);
+					
 		this.update = function () {
 
 		}
@@ -139,11 +142,16 @@ export default class GlobeControls{
 						gisCamera.position.copy(cameraPsotion);
 
 						_startMouse.copy(_nowMouse);
+
+						earth.update(gisCamera);
 					}
 
 				}
 
 			}else if( state === STATE.ZOOM ){
+
+
+
 
 			}else if( state = STATE.ROTATE ){
 
@@ -198,6 +206,7 @@ export default class GlobeControls{
 
 					nowZAngle = rZ;
 
+					earth.update(gisCamera);
 					// console.log('gisCamera.position:', JSON.stringify(gisCamera.position, null, 4))
 					// console.log('gisCamera.rotation:', JSON.stringify(gisCamera.rotation, null, 4))
 					// console.log('axis:', JSON.stringify(axis.normalize(), null, 4))
@@ -290,6 +299,9 @@ export default class GlobeControls{
 				gisCamera.position.add(vector);
 
 			}
+
+
+			earth.update(gisCamera);
 
 		}
 
