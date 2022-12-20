@@ -92,8 +92,7 @@ export default class GlobeControls{
 			intersection = earth.getMouseIntersection(gisCamera, _startMouse);
 
 			if( intersection ){
-
-
+				
 				domElement.addEventListener( 'pointermove', onPointerMove );
 				domElement.addEventListener( 'pointerup', onPointerUp );
 

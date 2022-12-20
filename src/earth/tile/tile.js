@@ -1,12 +1,6 @@
 import {
 	Mesh,
-	MeshBasicMaterial,
-	ArrowHelper,
-	Vector3,
-	BoxGeometry,
-	BufferGeometry,
-	LineBasicMaterial,
-	Line
+	ShaderMaterial,
 } from 'three';
 import TileState from '../tile/tile_state.js';
 import TileGeometry from './tile_geometry.js';
@@ -54,58 +48,51 @@ export default class Tile{
 		}
 
 		let geometry = new TileGeometry( this.extent, z ),
-				material = new MeshBasicMaterial({
-					depthTest: false,
-					color: 0xffffff,
+				material = new ShaderMaterial({
+					depthWrite: false,
+					// polygonOffset: true,
+					// polygonOffsetFactor: z,
+					// polygonOffsetFactor: z,
+					uniforms: {
+						uTexture: null
+					},
+					vertexShader: `
+						precision mediump float;
+						varying vec2 vUv;
+
+						void main() {
+							vUv = uv;
+							gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+						}
+					`,
+					fragmentShader: `
+						precision mediump float;
+
+						uniform sampler2D uTexture;
+						varying vec2 vUv;
+
+						void main() {
+
+							vec4 texture = texture2D( uTexture, vUv );
+
+				    	gl_FragColor = texture;
+						}
+					`
 				})
 
 
 		this.mesh = new Mesh( geometry, material );
 		this.mesh.name = `${x}-${y}-${z}`;
+		this.mesh.renderOrder = z;
 
 		this.centerSphere = this.mesh.geometry.boundingSphere.center;
 		this.geometricError = this.mesh.geometry.boundingSphere.radius / 256;
 		this.state = TileState.READY;
 
-		// for( let key in this.cornersVector ){
-		// 	let value = this.cornersVector[key];
-		// for( let i = 0, len = this.extent.centers.length; i < len; i++ ){
-		// 	let normal = this.extent.normals[i],
-		// 			center = this.extent.centers[i];
-		// 	// this.mesh.add( new ArrowHelper(
-		// 	// 	value.clone(),
-		// 	// 	value.clone(),
-		// 	// 	1000000 , 0x000000, 100000, 10000)
-		// 	// );
-
-		// 	let lineMaterial = new LineBasicMaterial({
-		// 		color: 0x0000ff
-		// 	});
-
-		// 	let points = [];
-		// 	points.push( center.clone() );
-		// 	points.push( center.clone().add(normal.clone().multiplyScalar ( 120000 )) );
-		// 	// points.push( new Vector3(0,0,0) );
-
-		// 	let lineGeometry = new BufferGeometry().setFromPoints( points );
-
-		// 	let line = new Line( lineGeometry, lineMaterial );
-		// 	this.mesh.add( line );
-
-		// 	// let cube = new Mesh(
-		// 	// 							new BoxGeometry( 60000, 60000, 60000 ),
-		// 	// 							new MeshBasicMaterial( {color: 0xff0000} ) 
-		// 	// 						);
-		// 	// cube.position.copy(center);
-		// 	// this.mesh.add(cube);
-		// }
-
 	}
 
 	getChildren(){
-		// if( this.z > 1 ){
-		// 	return [];
-		// }
+
 		if( this.#children === null ){
 			this.#children = [
 				new Tile(
@@ -138,7 +125,9 @@ export default class Tile{
 	}
 
 	setTexture(texture){
-		this.mesh.material.map = texture;
+		this.mesh.material.uniforms.uTexture = {
+			value: texture
+		}
 		this.state = TileState.IMAGELOADED;
 		return this;
 	}
