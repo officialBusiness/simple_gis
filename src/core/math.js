@@ -28,6 +28,7 @@ const GisMath = {
 		origin.y /= yRadius;
 		origin.z /= zRadius;
 
+		// direction = direction.normalize();
 		direction.x /= xRadius;
 		direction.y /= yRadius;
 		direction.z /= zRadius;

@@ -78,15 +78,14 @@ export default class Earth{
 	}
 
 	getMouseIntersection(gisCamera, mouse){
-		let ray = gisCamera.getMouseRay(mouse);
+		let ray = gisCamera.getMouseLine(mouse);
 
 		ray.origin.applyMatrix4(this.matrixInv);
-		ray.direction.applyMatrix4(this.matrixInv);
+		ray.destination.applyMatrix4(this.matrixInv);
 
-		// return GisMath.getEllipseIntersection(
-		// 	this.ellipse.x, this.ellipse.y, this.ellipse.z,
-		// 	ray.origin, ray.direction, this.matrix
-		// );
+		ray.direction = new Vector3().copy(ray.destination).sub(ray.origin);
+
+		ray.direction.normalize();
 
 		return this.getRayIntersection(ray.origin, ray.direction);
 	}

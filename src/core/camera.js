@@ -7,23 +7,23 @@ export default class GisCamera extends THREE.PerspectiveCamera{
 		super(fov, aspect, near, far);
 	}
 
-	getMouseRay(mouse){
+	getMouseLine(mouse){
 
 		let
 			origin = new THREE.Vector3(),
-			direction = new THREE.Vector3();
+			destination = new THREE.Vector3();
 
-		origin.x = direction.x = mouse.x;
-		origin.y = direction.y = mouse.y;
+		origin.x = destination.x = mouse.x;
+		origin.y = destination.y = mouse.y;
 
 		origin.z = -1;
-		direction.z = 1;
+		destination.z = 1;
 
 		GisMath.unproject(origin, this);
-		GisMath.unproject(direction, this);
+		GisMath.unproject(destination, this);
 
-		direction.sub(origin);
+		// direction.sub(origin);
 
-		return { origin, direction }
+		return { origin, destination }
 	}
 }
