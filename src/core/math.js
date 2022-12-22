@@ -14,8 +14,6 @@ const GisMath = {
 		return v;
 	},
 
-
-
 	getEllipseIntersection(
 		xRadius, yRadius, zRadius,
 		origin, direction,
