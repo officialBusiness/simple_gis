@@ -22,11 +22,11 @@
 		<script type="module">
 			import * as THREE from 'three';
 			import Stats from 'jsm/libs/stats.module.js';
-			import GlobeControls from '../src/earth/controls/globe_controls.js';
-			import { OrbitControls } from '../src/earth/controls/orbit_controls.js';
+			import GlobeControls from '../src.old/earth/controls/globe_controls.js';
+			import { OrbitControls } from '../src.old/earth/controls/orbit_controls.js';
 
-			import Earth from '../src/earth/earth.js';
-			import GisCamera from '../src/core/camera.js';
+			import Earth from '../src.old/earth/earth.js';
+			import GisCamera from '../src.old/core/camera.js';
 
 
 			const renderer = new THREE.WebGLRenderer( {
@@ -46,7 +46,8 @@
 			scene.add(new THREE.AmbientLight( 0x404040 ));
 
 			const camera = new GisCamera( 60, window.innerWidth / window.innerHeight, 1, 100000000 );
-			camera.position.set(0, 0, 1000);
+			// camera.position.set(0, 0, 1000);
+			camera.position.set(0, 0, 10000000);
 			window.camera = camera;
 
 			// const camera = new GisCamera( 60, window.innerWidth / window.innerHeight, 1, 1000000 );

@@ -7,6 +7,7 @@ import TileGeometry from './tile_geometry.js';
 import Coordinates from '../coordinates/coordinates.js';
 
 export function createRootTile(){
+	// return [new Tile(0, 0, 0), new Tile(1, 0, 0)];
 	return [new Tile(0, 0, 0)];
 }
 

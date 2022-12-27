@@ -85,5 +85,7 @@ export default class BingLayer{
     //var styles = ['a','r','h']
     url = "//ecn.t" + serverIdx + ".tiles.virtualearth.net/tiles/h" + strMerge4 + ".jpeg?g=1239&mkt=en-us";
     return url;
+
+    // return `https://t0.tianditu.gov.cn/DataServer?x=${column}&y=${row}&l=${level + 1}&T=img_c&tk=40d414db44ccec728f3afdfd33e033f1`;
   }
 }
