@@ -81,9 +81,20 @@ export default class Terrain{
 		return this;
 	}
 
-	applyMatrix4(matrix){
-		this.#tiles.applyMatrix4(matrix);
+	setMatrix4(matrix){
+		// this.#tiles.applyMatrix4(matrix);
+
+		matrix.decompose( this.#tiles.position, this.#tiles.quaternion, this.#tiles.scale )
 		this.#originMatrix = matrix;
+
+
+		// console.log('this.#terrain:', this.#terrain);
+		// console.log('this.#terrain.matrix:', this.#terrain.matrix);
+		// this.#tiles.matrix.copy(matrix);
+		// this.#tiles.updateMatrix();
+
+		this.#originMatrix = matrix;
+
 		return this;
 	}
 

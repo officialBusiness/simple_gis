@@ -53,7 +53,8 @@ export default class Earth{
 			0, 0, 0, 1,
 		).invert();
 
-		this.#terrain.applyMatrix4(matrix);
+		this.#terrain.setMatrix4(matrix);
+
 		this.matrix = matrix;
 		this.matrixInv = matrix.clone().invert();
 

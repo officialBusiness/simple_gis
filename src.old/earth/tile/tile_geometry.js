@@ -62,7 +62,7 @@ export default class TileGeometry extends BufferGeometry{
 						vector.clone().sub( left )
 					).normalize());
 				}
-			}			
+			}
 		}
 
 	  for (let i = 0; i < hSegment; i++) {

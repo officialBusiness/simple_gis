@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+	  "target": "es5",
+	  "lib": ["es2015", "dom"],
+    "module": "es6",
+    "moduleResolution": "node",
+    // "sourceMap": true,
+    // "declaration": true,
+    // "outDir": "./build/umd",
+	  // "outFile": "./build/umd/simpleGis.js",
+    "strict": true,
+    "allowJs": true
+  }
+}
